@@ -49,6 +49,8 @@
 1. 模板匹配跟踪
 
     ```python
+    from tacker.templaterTrack.templar import TemplateTracker
+
     method = ["BOOSTING", "TM_CCOEFF_NORMED"] # 可选两种，默认为BOOSTING
     # ==>初始化：frame为首帧，roi为框选结果
     # frame(ndarray): ret, frame = video.read()
@@ -62,6 +64,8 @@
 2. 深度学习跟踪
 
     ```python
+    from tacker.deepvisionTrack.visionar import VisionTracker
+
     tracking = True # 默认为True，输出跟踪结果。设置为False时只输出YOLO检测结果。
 
     # ==>初始化：TPEs，目标检测线程池设置参数，默认为2。

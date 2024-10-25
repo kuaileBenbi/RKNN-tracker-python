@@ -1,90 +1,92 @@
 import cv2
 import numpy as np
 
+# from tracker.deepvisionTrack.config import CLASSES
+
 OBJ_THRESH, NMS_THRESH, IMG_SIZE = 0.25, 0.45, 640
 
-CLASSES = (
-    "person",
-    "bicycle",
-    "car",
-    "motorbike ",
-    "aeroplane ",
-    "bus ",
-    "train",
-    "truck ",
-    "boat",
-    "traffic light",
-    "fire hydrant",
-    "stop sign ",
-    "parking meter",
-    "bench",
-    "bird",
-    "cat",
-    "dog ",
-    "horse ",
-    "sheep",
-    "cow",
-    "elephant",
-    "bear",
-    "zebra ",
-    "giraffe",
-    "backpack",
-    "umbrella",
-    "handbag",
-    "tie",
-    "suitcase",
-    "frisbee",
-    "skis",
-    "snowboard",
-    "sports ball",
-    "kite",
-    "baseball bat",
-    "baseball glove",
-    "skateboard",
-    "surfboard",
-    "tennis racket",
-    "bottle",
-    "wine glass",
-    "cup",
-    "fork",
-    "knife ",
-    "spoon",
-    "bowl",
-    "banana",
-    "apple",
-    "sandwich",
-    "orange",
-    "broccoli",
-    "carrot",
-    "hot dog",
-    "pizza ",
-    "donut",
-    "cake",
-    "chair",
-    "sofa",
-    "pottedplant",
-    "bed",
-    "diningtable",
-    "toilet ",
-    "tvmonitor",
-    "laptop	",
-    "mouse	",
-    "remote ",
-    "keyboard ",
-    "cell phone",
-    "microwave ",
-    "oven ",
-    "toaster",
-    "sink",
-    "refrigerator ",
-    "book",
-    "clock",
-    "vase",
-    "scissors ",
-    "teddy bear ",
-    "hair drier",
-    "toothbrush ",
-)
+# CLASSES = (
+#     "person",
+#     "bicycle",
+#     "car",
+#     "motorbike ",
+#     "aeroplane ",
+#     "bus ",
+#     "train",
+#     "truck ",
+#     "boat",
+#     "traffic light",
+#     "fire hydrant",
+#     "stop sign ",
+#     "parking meter",
+#     "bench",
+#     "bird",
+#     "cat",
+#     "dog ",
+#     "horse ",
+#     "sheep",
+#     "cow",
+#     "elephant",
+#     "bear",
+#     "zebra ",
+#     "giraffe",
+#     "backpack",
+#     "umbrella",
+#     "handbag",
+#     "tie",
+#     "suitcase",
+#     "frisbee",
+#     "skis",
+#     "snowboard",
+#     "sports ball",
+#     "kite",
+#     "baseball bat",
+#     "baseball glove",
+#     "skateboard",
+#     "surfboard",
+#     "tennis racket",
+#     "bottle",
+#     "wine glass",
+#     "cup",
+#     "fork",
+#     "knife ",
+#     "spoon",
+#     "bowl",
+#     "banana",
+#     "apple",
+#     "sandwich",
+#     "orange",
+#     "broccoli",
+#     "carrot",
+#     "hot dog",
+#     "pizza ",
+#     "donut",
+#     "cake",
+#     "chair",
+#     "sofa",
+#     "pottedplant",
+#     "bed",
+#     "diningtable",
+#     "toilet ",
+#     "tvmonitor",
+#     "laptop	",
+#     "mouse	",
+#     "remote ",
+#     "keyboard ",
+#     "cell phone",
+#     "microwave ",
+#     "oven ",
+#     "toaster",
+#     "sink",
+#     "refrigerator ",
+#     "book",
+#     "clock",
+#     "vase",
+#     "scissors ",
+#     "teddy bear ",
+#     "hair drier",
+#     "toothbrush ",
+# )
 
 
 def filter_boxes(boxes, box_confidences, box_class_probs):
@@ -254,7 +256,7 @@ def yolov8_post_process(input_data, original_shape, ratio, dw, dh):
 
     boxes = np.concatenate(nboxes)
     classes_id = np.concatenate(nclasses)
-    classes_name = [CLASSES[cl] for cl in classes_id]
+    # classes_name = [CLASSES[cl] for cl in classes_id]
     scores = np.concatenate(nscores)
 
     # Scale boxes back to original image shape
@@ -264,7 +266,7 @@ def yolov8_post_process(input_data, original_shape, ratio, dw, dh):
     boxes[:, [1, 3]] /= ratio[1]
     boxes = np.clip(boxes, 0, np.array(original_shape)[[1, 0, 1, 0]])
 
-    return boxes, classes_id, classes_name, scores
+    return boxes, classes_id, scores
 
 
 def draw(image, boxes, scores, classes):
@@ -275,15 +277,15 @@ def draw(image, boxes, scores, classes):
         # print('box coordinate left,top,right,down: [{}, {}, {}, {}]'.format(top, left, right, bottom))
 
         cv2.rectangle(image, (l, t), (b, r), (255, 0, 0), 2)
-        cv2.putText(
-            image,
-            "{0} {1:.2f}".format(CLASSES[cl], score),
-            ( l, t - 6),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.6,
-            (0, 0, 255),
-            2,
-        )
+        # cv2.putText(
+        #     image,
+        #     "{0} {1:.2f}".format(CLASSES[cl], score),
+        #     (l, t - 6),
+        #     cv2.FONT_HERSHEY_SIMPLEX,
+        #     0.6,
+        #     (0, 0, 255),
+        #     2,
+        # )
 
 
 def letterbox(im, new_shape=(640, 640), color=(0, 0, 0)):
@@ -361,7 +363,7 @@ def myFunc(rknn_lite, IMG):
     # print("oups1",len(outputs))
     # print("oups2",outputs[0].shape)
 
-    ltrb_boxes, classes_id, classes_name, scores = yolov8_post_process(
+    ltrb_boxes, classes_id, scores = yolov8_post_process(
         outputs, IMG.shape, ratio, dw, dh
     )
     if ltrb_boxes is None:
@@ -374,6 +376,5 @@ def myFunc(rknn_lite, IMG):
     return IMG, {
         "ltrb_boxes": ltrb_boxes,
         "classes_id": classes_id,
-        "classes_name": classes_name,
         "scores": scores,
     }

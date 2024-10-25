@@ -12,6 +12,7 @@ from .sort.tracker import Tracker
 # from sklearn.decomposition import PCA
 # from sklearn.manifold import TSNE
 # import seaborn as sns
+# from tracker.deepvisionTrack.config import CLASSES
 
 __all__ = ["DeepSort"]
 
@@ -87,6 +88,8 @@ class DeepSort(object):
             x1, y1, x2, y2 = self._tlwh_to_xyxy(box)
             track_id = track.track_id
             track_cls = track.cls
+            # [CLASSES[cl] for cl in classes_id]
+            # track_classes_name = CLASSES[track.cls]
             outputs.append(
                 np.array([x1, y1, x2, y2, track_cls, track_id], dtype=np.int32)
             )
