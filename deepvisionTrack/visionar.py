@@ -42,7 +42,7 @@ class VisionTracker:
         try:
             # 尝试从检测器线程池中获取检测结果
             (cur_frame, results), flag = self.detector.get_nowait()  # 使用非阻塞获取
-            if not flag or results is None:
+            if not flag:
                 return None  # 检测未完成，或无结果，继续处理下一帧
 
             # 提取检测结果
@@ -133,7 +133,7 @@ if __name__ == "__main__":
             break
 
         outputs = visioner.detect_and_track(frame)
-        if len(outputs) > 0:
+        if len(outputs["boxes"]) > 0:  # 确保有结果时才绘制框，避免cv2.rectangle为空报错
             curframe = outputs["frame"]
             boxes = outputs["boxes"]
             classnames = outputs["classes"]

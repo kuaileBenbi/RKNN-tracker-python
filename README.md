@@ -76,7 +76,11 @@
     # visioner.set_target_id(id=1)                  # 可选参数，指定跟踪id，由手动输入，id为deepsort跟踪id
     # ==>跟踪：frame为当前帧，返回跟踪结果
     outputs = visioner.detect_and_track(frame)
-    # 当为跟踪时：outputs(dict): {"frame": cur_frame,"boxes": tracked_boxes，"classes": tracked_ids}，classes返回的是多目标跟踪的id
-    # 当为检测时：outputs(dict): {"frame": cur_frame, "boxes": ltrb_boxes, "classes": cls_ids}，classes返回的是目标的类别
-    # "boxes":N*4维ndarray数组，N表示检测到的目标数目，4表示为[left, top, right, bottom]
+    # 当为检测时：outputs(dict): {"frame": cur_frame, "boxes": ltrb_boxes, "classes": classes_name}，
+    # classes: str格式，返回的是目标类别的名称
+    # "boxes": N*4维ndarray数组，N表示检测到的目标数目，4表示为[left, top, right, bottom]即目标box的坐标
+
+    # 当为跟踪时：outputs(dict): {"frame": cur_frame, "boxes": tracked_boxes，"classes": track_classes_name, "tracked_ids":tracked_ids}，
+    # tracked_ids：int类型, 返回的是多目标跟踪的id
+    # boxes、classes格式同目标检测。
     ```
